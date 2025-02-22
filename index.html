@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Image Slider</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            transition: background 0.5s ease-in-out;
+        }
+        .slider-container {
+            position: relative;
+            width: 60%;
+            max-width: 600px;
+            height: 400px;
+            perspective: 1000px;
+        }
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            position: absolute;
+            width: 60%;
+            height: 80%;
+            border-radius: 10px;
+            overflow: hidden;
+            transform-origin: center center;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            opacity: 0.7;
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(80%);
+        }
+        .slide.active {
+            transform: translateZ(100px) scale(1.2);
+            opacity: 1;
+        }
+        .slide.left {
+            transform: translateX(-120%) rotateY(30deg) scale(0.8);
+        }
+        .slide.right {
+            transform: translateX(120%) rotateY(-30deg) scale(0.8);
+        }
+        .text-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 50%;
+        }
+        .prev { left: -50px; }
+        .next { right: -50px; }
+    </style>
+</head>
+<body>
+
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide active">
+                <img src="California.jpg" alt="Machu Picchu">
+                <div class="text-overlay">California<br>California is a land of 𝓼𝓾𝓷𝓼𝓱𝓲𝓷𝓮, 𝑑𝑟𝑒𝑎𝑚𝑠, 𝔻𝕚𝕧𝕖𝕣𝕤𝕚𝕥𝕪, and 𝒊𝒏𝒏𝒐𝒗𝒂𝒕𝒊𝒐𝒏! </div>
+            </div>
+            <div class="slide right">
+                <img src="Manhatten.jpg" alt="Mountains">
+                <div class="text-overlay">Manhattan is a city of 𝓼𝓴𝔂𝓼𝓬𝓻𝓪𝓹𝓮𝓻𝓼, 𝑒𝑛𝑑𝑙𝑒𝑠𝑠 𝑒𝑛𝑒𝑟𝑔𝑦, 𝕓𝕣𝕚𝕘𝕙𝕥 𝕝𝕚𝕘𝕙𝕥𝕤, and 𝒃𝒐𝒖𝒏𝒅𝒍𝒆𝒔𝒔 𝒐𝒑𝒑𝒐𝒓𝒕𝒖𝒏𝒊𝒕𝒚! 🏙️✨</div>
+            </div>
+            <div class="slide left">
+                <img src="los angelas.jpg" alt="Nature">
+                <div class="text-overlay">Los Angeles is a city of 𝓰𝓵𝓪𝓶𝓸𝓾𝓻, 𝑑𝑟𝑒𝑎𝑚𝑠, 𝕙𝕠𝕝𝕝𝕪𝕨𝕠𝕠𝕕 𝕙𝕚𝕘𝕙𝕝𝕚𝕘𝕙𝕥𝕤, and 𝒔𝒖𝒏-𝒔𝒐𝒂𝒌𝒆𝒅 𝒗𝒊𝒃𝒆𝒔! 🌴☀️🎬</div>
+            </div>
+        </div>
+        <button class="prev" onclick="moveSlide(-1)">❮</button>
+        <button class="next" onclick="moveSlide(1)">❯</button>
+    </div>
+
+    <script>
+        let index = 0;
+        const slides = document.querySelectorAll(".slide");
+        const body = document.body;
+
+        function updateSlides() {
+            slides.forEach((slide, i) => {
+                slide.classList.remove("active", "left", "right");
+
+                if (i === index) {
+                    slide.classList.add("active");
+                    body.style.backgroundImage = `url(${slide.querySelector("img").src})`;
+                } else if (i === (index + 1) % slides.length) {
+                    slide.classList.add("right");
+                } else {
+                    slide.classList.add("left");
+                }
+            });
+        }
+
+        function moveSlide(step) {
+            index = (index + step + slides.length) % slides.length;
+            updateSlides();
+        }
+
+        updateSlides();
+    </script>
+
+</body>
+</html>

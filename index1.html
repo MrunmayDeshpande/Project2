@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional 3D Image Slider</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            transition: background 0.8s ease-in-out;
+            font-family: 'Arial', sans-serif;
+        }
+        .slider-container {
+            position: relative;
+            width: 60%;
+            max-width: 600px;
+            height: 400px;
+            perspective: 1500px;
+        }
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease-in-out;
+        }
+        .slide {
+            position: absolute;
+            width: 70%;
+            height: 85%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+            transform-origin: center;
+            transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+            opacity: 0.6;
+            filter: blur(3px);
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .slide.active {
+            transform: translateZ(200px) scale(1.2);
+            opacity: 1;
+            filter: none;
+        }
+        .slide.left {
+            transform: translateX(-100%) rotateY(25deg) scale(0.9);
+        }
+        .slide.right {
+            transform: translateX(100%) rotateY(-25deg) scale(0.9);
+        }
+        .text-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 24px;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        .prev { left: -50px; }
+        .next { right: -50px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide active">
+                <img src="California.jpg" alt="Machu Picchu">
+                <div class="text-overlay">California</div>
+            </div>
+            <div class="slide right">
+                <img src="Manhatten.jpg" alt="Mountains">
+                <div class="text-overlay">Manhatten</div>
+            </div>
+            <div class="slide left">
+                <img src="los angelas.jpg" alt="Nature">
+                <div class="text-overlay">Los Angeles</div>
+            </div>
+        </div>
+        <button class="nav-button prev" onclick="moveSlide(-1)">❮</button>
+        <button class="nav-button next" onclick="moveSlide(1)">❯</button>
+    </div>
+
+    <script>
+        let index = 0;
+        const slides = document.querySelectorAll(".slide");
+        const body = document.body;
+
+        function updateSlides() {
+            slides.forEach((slide, i) => {
+                slide.classList.remove("active", "left", "right");
+
+                if (i === index) {
+                    slide.classList.add("active");
+                    body.style.backgroundImage = `url(${slide.querySelector("img").src})`;
+                } else if (i === (index + 1) % slides.length) {
+                    slide.classList.add("right");
+                } else {
+                    slide.classList.add("left");
+                }
+            });
+        }
+
+        function moveSlide(step) {
+            index = (index + step + slides.length) % slides.length;
+            updateSlides();
+        }
+
+        setInterval(() => moveSlide(1), 5000); // Auto-slide every 5 seconds
+        updateSlides();
+    </script>
+
+</body>
+</html>
